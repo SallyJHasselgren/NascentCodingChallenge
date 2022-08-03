@@ -4,8 +4,7 @@ import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
 import Typography from '@mui/material/Typography';
 import Avatar from '@mui/material/Avatar';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
+import React, { useState } from 'react';
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
@@ -15,6 +14,13 @@ import Button from '@mui/material/Button';
 
 export default function UserForm() {
 
+    const [user, setUser] = useState({
+        firstName: "", 
+        lastName: "",
+        email: "",
+        address: "",
+        phoneNumber: ""
+     });
 
       const handleSubmit = (event) => {
         event.preventDefault();
@@ -25,6 +31,9 @@ export default function UserForm() {
         });
       };
 
+      const changeHandler = e => {
+        setUser({...user, [e.target.name]: e.target.value});
+      }
 
     return (
         <div className="App">
@@ -45,19 +54,19 @@ export default function UserForm() {
                     <Box component="form" onSubmit={handleSubmit}  sx={{ mt: 3 }}>
                         <Grid container spacing={2}>
                             <Grid item xs={12} sm={6}>
-                                <TextField required id="firstName" fullWidth label="First Name" variant="outlined"/>
+                                <TextField required id="firstName" fullWidth label="First Name" name = "firstName" variant="outlined" onChange={changeHandler}/>
                             </Grid>
                             <Grid item xs={12} sm={6}>
-                                <TextField required id="lastName" fullWidth label="Last Name" variant="outlined"  />
+                                <TextField required id="lastName" fullWidth label="Last Name" name = "lastName" variant="outlined" onChange={changeHandler} />
                             </Grid>
                             <Grid item xs={12}>
-                                <TextField required id="email" fullWidth label="Email" variant="outlined"  />
+                                <TextField required id="email" fullWidth label="Email" name = "email" variant="outlined" onChange={changeHandler} />
                             </Grid>
                             <Grid item xs={12}>
-                                <TextField required id="phoneNumber" fullWidth label="Phone Number" variant="outlined"  />
+                                <TextField required id="phoneNumber" fullWidth label="Phone Number" name = "phoneNumber" variant="outlined" onChange={changeHandler} />
                             </Grid>
                             <Grid item xs={12}>
-                                <TextField required id="address" fullWidth label="Address" variant="outlined" />
+                                <TextField required id="address" fullWidth label="Address" name = "address" variant="outlined" onChange={changeHandler} />
                             </Grid>
                         </Grid>
                         <Button type="submit" fullWidth sx={{ mt: 3, mb: 2 }} variant="contained">Submit</Button>
