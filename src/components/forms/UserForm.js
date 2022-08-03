@@ -10,30 +10,37 @@ import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
 import { TextField } from '@mui/material';
 import Button from '@mui/material/Button';
+import { validateEmail } from '../../utils/common';
 
 
 export default function UserForm() {
 
     const [user, setUser] = useState({
-        firstName: "", 
+        firstName: "",
         lastName: "",
         email: "",
         address: "",
         phoneNumber: ""
-     });
+    });
 
-      const handleSubmit = (event) => {
+    const handleSubmit = (event) => {
         event.preventDefault();
-        const data = new FormData(event.currentTarget);
-        console.log({
-          email: data.get('email'),
-          password: data.get('password'),
-        });
-      };
+        try {
+            validateEmail(user.email);
+        }
+        catch (err) {
+            alert(err.message);
+        }
+        //const data = new FormData(event.currentTarget);
+        // console.log({
+        //   email: data.get('email'),
+        //   password: data.get('password'),
+        // });
+    };
 
-      const changeHandler = e => {
-        setUser({...user, [e.target.name]: e.target.value});
-      }
+    const changeHandler = e => {
+        setUser({ ...user, [e.target.name]: e.target.value });
+    }
 
     return (
         <div className="App">
@@ -51,22 +58,22 @@ export default function UserForm() {
                     <Typography component="h1" variant="h5">
                         Nascent
                     </Typography>
-                    <Box component="form" onSubmit={handleSubmit}  sx={{ mt: 3 }}>
+                    <Box component="form" onSubmit={handleSubmit} sx={{ mt: 3 }}>
                         <Grid container spacing={2}>
                             <Grid item xs={12} sm={6}>
-                                <TextField required id="firstName" fullWidth label="First Name" name = "firstName" variant="outlined" onChange={changeHandler}/>
+                                <TextField required id="firstName" fullWidth label="First Name" name="firstName" variant="outlined" onChange={changeHandler} />
                             </Grid>
                             <Grid item xs={12} sm={6}>
-                                <TextField required id="lastName" fullWidth label="Last Name" name = "lastName" variant="outlined" onChange={changeHandler} />
+                                <TextField required id="lastName" fullWidth label="Last Name" name="lastName" variant="outlined" onChange={changeHandler} />
                             </Grid>
                             <Grid item xs={12}>
-                                <TextField required id="email" fullWidth label="Email" name = "email" variant="outlined" onChange={changeHandler} />
+                                <TextField required id="email" fullWidth label="Email" name="email" variant="outlined" onChange={changeHandler} />
                             </Grid>
                             <Grid item xs={12}>
-                                <TextField required id="phoneNumber" fullWidth label="Phone Number" name = "phoneNumber" variant="outlined" onChange={changeHandler} />
+                                <TextField required id="phoneNumber" fullWidth label="Phone Number" name="phoneNumber" variant="outlined" onChange={changeHandler} />
                             </Grid>
                             <Grid item xs={12}>
-                                <TextField required id="address" fullWidth label="Address" name = "address" variant="outlined" onChange={changeHandler} />
+                                <TextField required id="address" fullWidth label="Address" name="address" variant="outlined" onChange={changeHandler} />
                             </Grid>
                         </Grid>
                         <Button type="submit" fullWidth sx={{ mt: 3, mb: 2 }} variant="contained">Submit</Button>
