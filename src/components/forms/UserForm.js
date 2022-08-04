@@ -46,6 +46,7 @@ export default function UserForm() {
         try {
             validateEmail(user.email);
             validatePhonenumber(user.phoneNumber);
+            console.log(user)
         }
         catch (err) {
             console.log(err.message);
@@ -111,12 +112,12 @@ export default function UserForm() {
                             <Grid item xs={12}>
                                 <Autocomplete
                                     disablePortal
-                                    fullWidth
                                     id="combo-box-demo"
+                                    getOptionSelected={(option, value) => option.name === value.name}
                                     getOptionLabel={(option) => (option ? option.name : "")}
                                     options={pokData}
-                                    sx={{ width: 300 }}
-                                    renderInput={(params) => <TextField{...params} label="Pokemon" />}
+                                    fullWidth
+                                    renderInput={(params) => <TextField{...params} name = "pokemonOption" onChange={changeHandler} label="Pokemon" />}
                                 />
                             </Grid>
                         </Grid>
