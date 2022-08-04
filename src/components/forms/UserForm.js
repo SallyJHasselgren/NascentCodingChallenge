@@ -12,9 +12,12 @@ import { TextField } from '@mui/material';
 import Button from '@mui/material/Button';
 import { validateEmail, validatePhonenumber } from '../../utils/common';
 import { useApp } from '../../utils/context';
+import { useEffect } from 'react';
+import { getPokemon } from '../../services/pokemonAPI';
 
 
 export default function UserForm() {
+    const [stat, setStat] = useState("");
 
     const [user, setUser] = useState({
         firstName: "",
@@ -23,6 +26,15 @@ export default function UserForm() {
         address: "",
         phoneNumber: ""
     });
+
+    //test
+    const getPokData = async () => {
+
+        const stat = await getPokemon();
+        console.log(stat);
+
+    }
+
 
     const appcontext = useApp();
 
@@ -46,6 +58,15 @@ export default function UserForm() {
     const changeHandler = e => {
         setUser({ ...user, [e.target.name]: e.target.value });
     }
+
+    useEffect(()=>{
+        try{
+            getPokData();
+        }
+        catch(err){
+            console.log(err);
+        }
+    })
 
     return (
         <div className="App">
