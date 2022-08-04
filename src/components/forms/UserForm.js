@@ -10,7 +10,8 @@ import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
 import { TextField } from '@mui/material';
 import Button from '@mui/material/Button';
-import { validateEmail } from '../../utils/common';
+import { validateEmail, validatePhonenumber } from '../../utils/common';
+import { useApp } from '../../utils/context';
 
 
 export default function UserForm() {
@@ -23,13 +24,17 @@ export default function UserForm() {
         phoneNumber: ""
     });
 
+    const appcontext = useApp();
+
     const handleSubmit = (event) => {
         event.preventDefault();
         try {
             validateEmail(user.email);
+            validatePhonenumber(user.phoneNumber);
         }
         catch (err) {
-            alert(err.message);
+            console.log(err.message);
+            appcontext.newAlert(err.message, "error");
         }
         //const data = new FormData(event.currentTarget);
         // console.log({

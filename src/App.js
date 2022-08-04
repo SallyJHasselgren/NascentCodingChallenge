@@ -4,12 +4,13 @@ import '@fontsource/roboto/400.css';
 import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
 import UserForm from './components/forms/UserForm';
+import { AppProvider } from './utils/context';
 
 function App() {
   return (
-    <div className="App">
+    <AppProvider>
       <UserForm></UserForm>
-    </div>
+    </AppProvider>
   );
 }
 
