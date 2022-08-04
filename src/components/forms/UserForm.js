@@ -14,6 +14,7 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
+import Autocomplete from '@mui/material/Autocomplete';
 import { validateEmail, validatePhonenumber } from '../../utils/common';
 import { useApp } from '../../utils/context';
 import { useEffect } from 'react';
@@ -56,6 +57,10 @@ export default function UserForm() {
         //   password: data.get('password'),
         // });
     };
+
+    // const changeHandlerSelect = e => {
+    //     setUser({ pokemonOption, [e.target.name]})
+    // }
 
     const changeHandler = e => {
         setUser({ ...user, [e.target.name]: e.target.value });
@@ -103,24 +108,16 @@ export default function UserForm() {
                             <Grid item xs={12}>
                                 <TextField required id="address" fullWidth label="Address" name="address" variant="outlined" onChange={changeHandler} />
                             </Grid>
-                           <Grid item xs={12}>
-                                <FormControl fullWidth>
-                                    <InputLabel id="demo-simple-select-label">Pokemon</InputLabel>
-                                    <Select
-                                        labelId="demo-simple-select-label"
-                                        id="demo-simple-select"
-                                        value={user.pokemonOption}
-                                        label="Pokemon"
-                                        onChange={changeHandler}
-                                    >
-                                        {
-                                            pokData.map(pokemon => (
-                                                <MenuItem value={pokemon.name}>
-                                                    {pokemon.name}</MenuItem>
-                                            ))
-                                        }
-                                    </Select>
-                                </FormControl>
+                            <Grid item xs={12}>
+                                <Autocomplete
+                                    disablePortal
+                                    fullWidth
+                                    id="combo-box-demo"
+                                    getOptionLabel={(option) => (option ? option.name : "")}
+                                    options={pokData}
+                                    sx={{ width: 300 }}
+                                    renderInput={(params) => <TextField{...params} label="Pokemon" />}
+                                />
                             </Grid>
                         </Grid>
                         <Button type="submit" fullWidth sx={{ mt: 3, mb: 2 }} variant="contained">Submit</Button>
