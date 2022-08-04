@@ -10,6 +10,10 @@ import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
 import { TextField } from '@mui/material';
 import Button from '@mui/material/Button';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import Select from '@mui/material/Select';
 import { validateEmail, validatePhonenumber } from '../../utils/common';
 import { useApp } from '../../utils/context';
 import { useEffect } from 'react';
@@ -17,24 +21,22 @@ import { getPokemon } from '../../services/pokemonAPI';
 
 
 export default function UserForm() {
-    const [stat, setStat] = useState("");
+    const [pokData, setPokData] = useState([]);
 
     const [user, setUser] = useState({
         firstName: "",
         lastName: "",
         email: "",
         address: "",
-        phoneNumber: ""
+        phoneNumber: "",
+        pokemonOption: "",
     });
 
-    //test
+    // Get all the pokemon data
     const getPokData = async () => {
-
-        const stat = await getPokemon();
-        console.log(stat);
-
+        const data = await getPokemon();
+        setPokData(data.data.results);
     }
-
 
     const appcontext = useApp();
 
@@ -59,11 +61,11 @@ export default function UserForm() {
         setUser({ ...user, [e.target.name]: e.target.value });
     }
 
-    useEffect(()=>{
-        try{
+    useEffect(() => {
+        try {
             getPokData();
         }
-        catch(err){
+        catch (err) {
             console.log(err);
         }
     })
@@ -100,6 +102,25 @@ export default function UserForm() {
                             </Grid>
                             <Grid item xs={12}>
                                 <TextField required id="address" fullWidth label="Address" name="address" variant="outlined" onChange={changeHandler} />
+                            </Grid>
+                           <Grid item xs={12}>
+                                <FormControl fullWidth>
+                                    <InputLabel id="demo-simple-select-label">Pokemon</InputLabel>
+                                    <Select
+                                        labelId="demo-simple-select-label"
+                                        id="demo-simple-select"
+                                        value={user.pokemonOption}
+                                        label="Pokemon"
+                                        onChange={changeHandler}
+                                    >
+                                        {
+                                            pokData.map(pokemon => (
+                                                <MenuItem value={pokemon.name}>
+                                                    {pokemon.name}</MenuItem>
+                                            ))
+                                        }
+                                    </Select>
+                                </FormControl>
                             </Grid>
                         </Grid>
                         <Button type="submit" fullWidth sx={{ mt: 3, mb: 2 }} variant="contained">Submit</Button>
