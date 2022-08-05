@@ -12,7 +12,6 @@ const style = {
   transform: 'translate(-50%, -50%)',
   width: 400,
   bgcolor: 'background.paper',
-  border: '2px solid #000',
   boxShadow: 24,
   p: 4,
 };
@@ -22,9 +21,7 @@ export default function UserFormReviewModal(props) {
   return (
     <div>
       <Modal
-
         open={props.open}
-     
         onClose={props.close}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
@@ -33,7 +30,7 @@ export default function UserFormReviewModal(props) {
           <Typography id="modal-modal-title" variant="h6" component="h2">
             Make sure all of your information is correct
           </Typography>
-          <Button fullWidth sx={{ mt: 3, mb: 2 }} onClick={props.submit} variant="contained">Submit</Button>
+          <Button fullWidth sx={{ mt: 3, mb: 2 }} color="success" onClick={props.submit} variant="contained">Submit</Button>
         </Box>
       </Modal>
     </div>
