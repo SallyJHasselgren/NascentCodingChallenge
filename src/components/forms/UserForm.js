@@ -21,7 +21,6 @@ import { useEffect } from 'react';
 import { getPokemon } from '../../services/pokemonAPI';
 import UserFormReviewModal from '../Modal/UserFormReviewModal';
 
-
 export default function UserForm() {
     const [pokData, setPokData] = useState([]);
 
@@ -37,6 +36,7 @@ export default function UserForm() {
 
     const [openReviewModal, setOpenReviewModal] = React.useState(false);
 
+    //called to via submit button -- will open a modal as a final form review for user
     const reviewModalOpen = (e) => {
 
         e.preventDefault();
@@ -46,6 +46,7 @@ export default function UserForm() {
             setOpenReviewModal(true);
 
         }
+        //creates a new alert to tell users an input is not correct
         catch (err) {
             console.log(err.message);
             appcontext.newAlert(err.message, "error");
@@ -63,6 +64,7 @@ export default function UserForm() {
 
     const appcontext = useApp();
 
+    //once final submit is pressed form fields clear and new alert tells users it has been succesfully submitted
     const handleSubmit = () => {
         try {
             setUser({
@@ -85,6 +87,7 @@ export default function UserForm() {
         }
     };
 
+    //pokemon handler
     const changeHandlerSelect = (value, e) => {
         if (value) { 
             setUser({...user, pokemonOption: {name: value.name, url: value.url}}); 
@@ -94,6 +97,7 @@ export default function UserForm() {
         }
     }
 
+    //user info handler
     const changeHandler = e => {
         setUser({ ...user, [e.target.name]: e.target.value });
     }
@@ -111,6 +115,7 @@ export default function UserForm() {
 
         <div className="App">
 
+            {/*passing data */}
             <UserFormReviewModal submit={handleSubmit} open={openReviewModal} close={reviewModalClose}></UserFormReviewModal>
 
             <Container component="main" maxWidth="xs">
