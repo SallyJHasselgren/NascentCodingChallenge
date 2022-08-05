@@ -19,6 +19,7 @@ import { validateEmail, validatePhonenumber } from '../../utils/common';
 import { useApp } from '../../utils/context';
 import { useEffect } from 'react';
 import { getPokemon } from '../../services/pokemonAPI';
+import UserFormReviewModal from '../Modal/UserFormReviewModal';
 
 
 export default function UserForm() {
@@ -30,8 +31,29 @@ export default function UserForm() {
         email: "",
         address: "",
         phoneNumber: "",
-        pokemonOption: "",
+        pokemonOption: null,
     });
+
+
+    const [openReviewModal, setOpenReviewModal] = React.useState(false);
+
+    const reviewModalOpen = (e) => {
+
+        e.preventDefault();
+        try {
+            validateEmail(user.email);
+            validatePhonenumber(user.phoneNumber);
+            setOpenReviewModal(true);
+
+        }
+        catch (err) {
+            console.log(err.message);
+            appcontext.newAlert(err.message, "error");
+        }
+
+    }
+
+    const reviewModalClose = () => setOpenReviewModal(false);
 
     // Get all the pokemon data
     const getPokData = async () => {
@@ -41,27 +63,31 @@ export default function UserForm() {
 
     const appcontext = useApp();
 
-    const handleSubmit = (event) => {
-        event.preventDefault();
+    const handleSubmit = () => {
         try {
-            validateEmail(user.email);
-            validatePhonenumber(user.phoneNumber);
-            console.log(user)
+            setUser({
+                firstName: "",
+                lastName: "",
+                email: "",
+                address: "",
+                phoneNumber: "",
+                pokemonOption: null,
+            });
+        
+            reviewModalClose();
+            appcontext.newAlert("Form submitted succesfully", "success");
+
+            console.log(user);
         }
         catch (err) {
             console.log(err.message);
             appcontext.newAlert(err.message, "error");
         }
-        //const data = new FormData(event.currentTarget);
-        // console.log({
-        //   email: data.get('email'),
-        //   password: data.get('password'),
-        // });
     };
 
-    // const changeHandlerSelect = e => {
-    //     setUser({ pokemonOption, [e.target.name]})
-    // }
+    const changeHandlerSelect = (value, e) => {
+        if (value) { setUser({...user, pokemonOption: {name: value.name, url: value.url} }); }
+    }
 
     const changeHandler = e => {
         setUser({ ...user, [e.target.name]: e.target.value });
@@ -74,10 +100,13 @@ export default function UserForm() {
         catch (err) {
             console.log(err);
         }
-    })
+    }, [])
 
     return (
+
         <div className="App">
+
+            <UserFormReviewModal submit={handleSubmit} open={openReviewModal} close={reviewModalClose}></UserFormReviewModal>
 
             <Container component="main" maxWidth="xs">
                 <Box
@@ -92,36 +121,39 @@ export default function UserForm() {
                     <Typography component="h1" variant="h5">
                         Nascent
                     </Typography>
-                    <Box component="form" onSubmit={handleSubmit} sx={{ mt: 3 }}>
+                    <Box sx={{ mt: 3 }}>
                         <Grid container spacing={2}>
                             <Grid item xs={12} sm={6}>
-                                <TextField required id="firstName" fullWidth label="First Name" name="firstName" variant="outlined" onChange={changeHandler} />
+                                <TextField required autoComplete='off' id="firstName" fullWidth label="First Name" name="firstName" variant="outlined" value={user.firstName} onChange={changeHandler} />
                             </Grid>
                             <Grid item xs={12} sm={6}>
-                                <TextField required id="lastName" fullWidth label="Last Name" name="lastName" variant="outlined" onChange={changeHandler} />
+                                <TextField required id="lastName" autoComplete='off' fullWidth label="Last Name" name="lastName" variant="outlined" value={user.lastName} onChange={changeHandler} />
                             </Grid>
                             <Grid item xs={12}>
-                                <TextField required id="email" fullWidth label="Email" name="email" variant="outlined" onChange={changeHandler} />
+                                <TextField required id="email" autoComplete='off' fullWidth label="Email" name="email" variant="outlined" value={user.email} onChange={changeHandler} />
                             </Grid>
                             <Grid item xs={12}>
-                                <TextField required id="phoneNumber" fullWidth label="Phone Number" name="phoneNumber" variant="outlined" onChange={changeHandler} />
+                                <TextField required id="phoneNumber" autoComplete='off' fullWidth label="Phone Number" name="phoneNumber" value={user.phoneNumber} variant="outlined" onChange={changeHandler} />
                             </Grid>
                             <Grid item xs={12}>
-                                <TextField required id="address" fullWidth label="Address" name="address" variant="outlined" onChange={changeHandler} />
+                                <TextField required id="address" autoComplete='off' fullWidth label="Address" name="address" variant="outlined" value={user.address} onChange={changeHandler} />
                             </Grid>
                             <Grid item xs={12}>
                                 <Autocomplete
                                     disablePortal
                                     id="combo-box-demo"
-                                    getOptionSelected={(option, value) => option.name === value.name}
                                     getOptionLabel={(option) => (option ? option.name : "")}
                                     options={pokData}
+                                    value={user.pokemonOption || null}
+                                    name="pokemonOption"
+                                    onChange={(event, value) => changeHandlerSelect(value)}
+                                    isOptionEqualToValue={(option, value) => option.name === value.name}
                                     fullWidth
-                                    renderInput={(params) => <TextField{...params} name = "pokemonOption" onChange={changeHandler} label="Pokemon" />}
+                                    renderInput={(params) => <TextField{...params} label="Pokemon" />}
                                 />
                             </Grid>
                         </Grid>
-                        <Button type="submit" fullWidth sx={{ mt: 3, mb: 2 }} variant="contained">Submit</Button>
+                        <Button fullWidth sx={{ mt: 3, mb: 2 }} variant="contained" onClick={reviewModalOpen} >Submit</Button>
                     </Box>
                 </Box>
             </Container>
