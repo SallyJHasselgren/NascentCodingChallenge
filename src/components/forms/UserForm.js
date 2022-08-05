@@ -86,7 +86,12 @@ export default function UserForm() {
     };
 
     const changeHandlerSelect = (value, e) => {
-        if (value) { setUser({...user, pokemonOption: {name: value.name, url: value.url} }); }
+        if (value) { 
+            setUser({...user, pokemonOption: {name: value.name, url: value.url}}); 
+        }
+        else{
+            setUser({...user, pokemonOption: null}); 
+        }
     }
 
     const changeHandler = e => {
@@ -153,7 +158,7 @@ export default function UserForm() {
                                 />
                             </Grid>
                         </Grid>
-                        <Button fullWidth sx={{ mt: 3, mb: 2 }} variant="contained" onClick={reviewModalOpen} >Submit</Button>
+                        <Button fullWidth sx={{ mt: 3, mb: 2 }} variant="contained" onClick={reviewModalOpen} disabled={!(user.firstName && user.lastName && user.phoneNumber && user.email && user.address && user.pokemonOption)}>Submit</Button>
                     </Box>
                 </Box>
             </Container>
